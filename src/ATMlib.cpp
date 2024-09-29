@@ -194,7 +194,7 @@ void ATMsynth::play(const byte *song) {
   timer1 =  timerBegin(0, 2, true);
   timerAttachInterrupt(timer1,sound_speaker_ISR,true);
   //timer1_enable(TIM_DIV1, TIM_EDGE, TIM_LOOP);
-  timerAlarmWrite(timer1,80000000 / SAMPLE_RATE,true);
+  timerAlarmWrite(timer1,60000000 / SAMPLE_RATE,true);
   //timer1_write(80000000 / SAMPLE_RATE);
   interrupts(); 
   timerAlarmEnable(timer1);
@@ -252,7 +252,7 @@ void ATMsynth::playPause() {
     //sigmaDeltaSetup(SOUNDPIN,1, 65000);
     timer1 =  timerBegin(0, 2, true);
     timerAttachInterrupt(timer1,sound_speaker_ISR,true);
-    timerAlarmWrite(timer1,80000000 / SAMPLE_RATE,true);
+    timerAlarmWrite(timer1,60000000 / SAMPLE_RATE,true);
     timerStart(timer1);
     sigmaDeltaWrite(0,SAMPLE_RATE);
     sigmadeltaflag = true;
