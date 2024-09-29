@@ -9,6 +9,6 @@
     },
     "version": "1.1.5",
     "exclude": "extras",
-    "frameworks": "arduino",
+    "frameworks": "esp32",
     "platforms": "atmelavr"
 }
