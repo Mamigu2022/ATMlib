@@ -1,5 +1,5 @@
 #include "ATMlib.h"
-#define SAMPLE_RATE 18000
+#define SAMPLE_RATE 22000
 #define SOUNDPIN 26
 
 volatile uint16_t cia, cia_count;
@@ -191,10 +191,10 @@ void ATMsynth::play(const byte *song) {
   //sigmaDeltaEnable();
   sigmaDeltaWrite(0,SAMPLE_RATE);
   sigmadeltaflag = true;
-  timer1 =  timerBegin(0, 2, true);
+  timer1 =  timerBegin(0, 80, true);
   timerAttachInterrupt(timer1,sound_speaker_ISR,true);
   //timer1_enable(TIM_DIV1, TIM_EDGE, TIM_LOOP);
-  timerAlarmWrite(timer1,60000000 / SAMPLE_RATE,true);
+  timerAlarmWrite(timer1,1000000 / SAMPLE_RATE,true);
   //timer1_write(80000000 / SAMPLE_RATE);
   interrupts(); 
   timerAlarmEnable(timer1);
@@ -208,11 +208,13 @@ void ATMsynth::stop() {
   //timerAttachInterrupt(timer1,&sound_speaker_ISR,false);
   //detachInterrupt(SOUNDPIN);
   //timerEnd(timer1);
-  timer1=NULL;
+  if (timer1) timerAlarmDisable(timer1);
+    sigmaDeltaWrite(0, 0);
+    timer1=NULL;
   //timer1_disable();
-  sigmaDeltaSetup(SOUNDPIN,0,SAMPLE_RATE);
+  //sigmaDeltaSetup(SOUNDPIN,0,SAMPLE_RATE);
   sigmadeltaflag = false;
-  sigmaDeltaWrite(0,0);
+  //sigmaDeltaWrite(0,0);
   //sigmaDeltaDisable();
   interrupts();
   memset(channel, 0, sizeof(channel));
@@ -232,12 +234,13 @@ void ATMsynth::playPause() {
    // timer1_disable();
    //detachInterrupt(SOUNDPIN);
    //timerAttachInterrupt(timer1,&sound_speaker_ISR,false);
-    timerStop(timer1);
-
-   //timer1=NULL;
+   //timerStop(timer1);
+  if (timer1) timerAlarmDisable(timer1);
+    sigmaDeltaWrite(0, 0);
+    timer1=NULL;
     //timerEnd(timer1);
     sigmadeltaflag = false;
-    sigmaDeltaWrite(0,0);
+    //sigmaDeltaWrite(0,0);
     interrupts();
   }
   else{
@@ -250,9 +253,9 @@ void ATMsynth::playPause() {
     //timer1_enable(0, 80, true);
     //sigmaDeltaEnable();
     //sigmaDeltaSetup(SOUNDPIN,1, 65000);
-    timer1 =  timerBegin(0, 2, true);
+    timer1 =  timerBegin(0, 80, true);
     timerAttachInterrupt(timer1,sound_speaker_ISR,true);
-    timerAlarmWrite(timer1,60000000 / SAMPLE_RATE,true);
+    timerAlarmWrite(timer1,1000000 / SAMPLE_RATE,true);
     timerStart(timer1);
     sigmaDeltaWrite(0,SAMPLE_RATE);
     sigmadeltaflag = true;
